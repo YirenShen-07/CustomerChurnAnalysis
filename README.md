@@ -1,33 +1,44 @@
 # Customer Churn Analysis with Logistic Regression & GAM
 
-An exploratory customer-retention analysis comparing interpretable models of telecom customer churn.
+An interpretable customer-retention analysis comparing simple and nonlinear models on the public IBM Telco benchmark.
 
 ## Business value
-Understand relationships between churn and customer tenure, charges, contracts, and services. The analysis can inform retention hypotheses; it does not establish that an intervention reduces churn.
+Assess which customer attributes are associated with churn, compare a model against doing nothing beyond predicting the majority class, and show how many churners a fixed threshold actually identifies. These are retention hypotheses, not measured intervention effects.
+
+## Results
+![Model comparison](reports/model_comparison.png)
+
+| Model | Accuracy | Churn precision | Churn recall | Churn F1 | ROC-AUC |
+| --- | --- | --- | --- | --- | --- |
+| Majority baseline | 0.7346 | 0.0000 | 0.0000 | 0.0000 | 0.5000 |
+| Logistic Regression | 0.8055 | 0.6572 | 0.5588 | 0.6040 | 0.8419 |
+| Logistic GAM | 0.8027 | 0.6622 | 0.5241 | 0.5851 | 0.8471 |
+
+New verification run: 7,043 rows; a stratified 80/20 split; seed 42; churn is the positive class and the decision threshold is 0.5. Imputers, scaling and encoders are fitted only on training rows. This replaces the earlier coursework's 81.83% accuracy claim for a different preprocessing/split configuration.
+
+Logistic Regression has stronger churn recall at this threshold; GAM has slightly higher ROC-AUC on this split. Accuracy alone would hide the majority baseline's zero churn recall. No threshold optimization or multi-split robustness study is claimed.
 
 ## Technical approach
-- Python, Pandas, scikit-learn, pygam, Plotly, and Seaborn.
-- Exploratory churn distributions and numeric correlations.
-- Removal of customer identifiers, numeric conversion of TotalCharges, median imputation, and one-hot encoding.
-- Logistic Regression and Logistic GAM, with a linear-regression exploratory comparison.
+Pandas cleaning, scikit-learn ColumnTransformer preprocessing and Logistic Regression, and pyGAM LogisticGAM. The GAM has three numeric splines for tenure, MonthlyCharges and TotalCharges, plus factor terms for categorical indicators. Partial-effect plots use the actual feature order and original numeric scales.
 
-## Saved results
-| Model | Test accuracy |
-| --- | --- |
-| Logistic Regression | 81.83% |
-| Logistic GAM | 80.70% |
+![Held-out confusion matrix](reports/confusion_matrix.png)
+![GAM effects](reports/gam_effects.png)
 
-Results are saved notebook outputs from a single 80/20 random split with random_state=42, not a fresh execution or cross-validation estimate. Accuracy alone does not establish improvement over a majority-class baseline.
+Linear Regression remains an exploratory continuous-output comparison in run metadata; it is not presented as the main binary classifier. GAM effects and regression coefficients describe model associations, not causal drivers.
 
-## Explore and run
-Open [the notebook](customer_churn_analysis.ipynb) in Google Colab. Supply the source telecom churn CSV and replace its personal Google Drive path. Install the imported dependencies and run cells in order. A redistributable dataset and a pinned environment are not currently provided.
-
-## Limitations and next steps
-- Fit imputers and encoders on training data only.
-- Add a majority-class baseline, churn-class precision/recall/F1, ROC-AUC, and a confusion matrix.
-- Correct the GAM plot labels to match the actual feature columns: the current labels include Churn even though it is excluded from inputs.
-- The GAM uses five spline terms and is not a full-feature equivalent of Logistic Regression.
-- Treat associations as hypotheses rather than causal retention recommendations.
+## Run
+```bash
+git clone https://github.com/YirenShen-07/CustomerChurnAnalysis.git
+cd CustomerChurnAnalysis
+python -m venv .venv
+# macOS / Linux:
+source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python download_data.py
+python analyze.py
+```
+Tested with Python 3.12. The download uses IBM's public repository and needs no login or Drive. Downloaded data is cached under data/ and excluded from Git. Source details and fingerprints: [DATA.md](DATA.md). [Notebook](customer_churn_analysis.ipynb) · [Metrics and coefficients](reports/).
 
 ## Project context
-Developed by Yiren Shen for Duke's AIPI 590 Explainable AI course.
+Original Duke AIPI 590 project by Yiren Shen, with an AI-assisted 2026 maintenance pass for reproducibility and evaluation. This is an educational benchmark, not evidence of deployed retention impact.

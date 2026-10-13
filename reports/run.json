@@ -1,0 +1,13 @@
+{
+  "seed": 42,
+  "split": "stratified 80/20",
+  "train_rows": 5634,
+  "test_rows": 1409,
+  "rows": 7043,
+  "churn_share": 0.2653698707936959,
+  "source_sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+  "linear_regression_exploratory_mse": 0.14392609345971927,
+  "threshold": 0.5,
+  "preprocessing_fit": "training split only",
+  "GAM_terms": "three numeric splines; categorical indicator factors"
+}
