@@ -20,7 +20,7 @@ Understand relationships between churn and customer tenure, charges, contracts, 
 Results are saved notebook outputs from a single 80/20 random split with random_state=42, not a fresh execution or cross-validation estimate. Accuracy alone does not establish improvement over a majority-class baseline.
 
 ## Explore and run
-Open the notebook in this repository in Google Colab. Supply the source telecom churn CSV and replace its personal Google Drive path. Install the imported dependencies and run cells in order. A redistributable dataset and a pinned environment are not currently provided.
+Open [the notebook](customer_churn_analysis.ipynb) in Google Colab. Supply the source telecom churn CSV and replace its personal Google Drive path. Install the imported dependencies and run cells in order. A redistributable dataset and a pinned environment are not currently provided.
 
 ## Limitations and next steps
 - Fit imputers and encoders on training data only.
